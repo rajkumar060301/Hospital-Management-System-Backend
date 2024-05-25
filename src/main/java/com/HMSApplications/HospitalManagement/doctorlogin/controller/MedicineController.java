@@ -10,10 +10,12 @@ import com.HMSApplications.HospitalManagement.doctorlogin.entity.Appointment;
 import com.HMSApplications.HospitalManagement.doctorlogin.entity.Medicine;
 import com.HMSApplications.HospitalManagement.doctorlogin.repository.MedicinesRepository;
 import com.HMSApplications.HospitalManagement.entity.Patient;
+import com.HMSApplications.HospitalManagement.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.AttributeNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +25,9 @@ import java.util.Optional;
 public class MedicineController {
 
     private MedicinesRepository medicinesRepository;
+    @Autowired
+    private PatientRepository patientRepository;
+
     public MedicineController(MedicinesRepository medicinesRepository) {
         this.medicinesRepository = medicinesRepository;
     }
@@ -40,12 +45,34 @@ public class MedicineController {
         return medicinesRepositories.findAll();
     }
 
+    @GetMapping("medicines/{id}")
+    public  ResponseEntity<Medicine> getMedicineById(@PathVariable Long id, Medicine medicine) {
+        Optional<Medicine> medicineOptional = medicinesRepositories.findById(id);
+        if (medicineOptional.isPresent()) {
+            medicine = medicineOptional.get();
+            return ResponseEntity.ok(medicine);
+        }
+        else {
+            return ResponseEntity.notFound().build();
+        }
+
+    }
+
+    @PutMapping("medicines/{id}")
+    public ResponseEntity<Medicine> updateMedicine(@PathVariable Long id, @RequestBody Medicine medicine) throws AttributeNotFoundException {
+        Medicine medicines = medicinesRepositories.findById(id).orElseThrow(()->new AttributeNotFoundException("medicine not found by id:"+id));
+        medicines.setDrugName(medicine.getDrugName());
+        medicines.setStock(medicine.getStock());
+        Medicine medicineData = medicinesRepositories.save(medicines);
+        return ResponseEntity.ok(medicineData);
+    }
+
     @DeleteMapping("medicines/{id}")
     public ResponseEntity<?> deleteMedicine(@PathVariable Long id) {
-        Optional<Medicine> appointmentOptional = medicinesRepositories.findById(id);
-        if (appointmentOptional.isPresent()) {
+        Optional<Medicine> medicineOptional = medicinesRepositories.findById(id);
+        if (medicineOptional.isPresent()) {
             medicinesRepositories.deleteById(id);
-            return ResponseEntity.ok().body("{\"message\": \"Appointment deleted successfully\"}"); // Return 200 OK with no body
+            return ResponseEntity.ok().body("{\"message\": \"Medicine deleted successfully\"}"); // Return 200 OK with no body
         } else {
             return ResponseEntity.notFound().build(); // Return 404 Not Found with no body
         }

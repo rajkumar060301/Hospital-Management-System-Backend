@@ -11,8 +11,10 @@ import com.HMSApplications.HospitalManagement.entity.Patient;
 import com.HMSApplications.HospitalManagement.repository.PatientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
+import javax.management.AttributeNotFoundException;
 import java.util.List;
 
 
@@ -51,6 +53,28 @@ public class PatientController {
         } else {
             return ResponseEntity.notFound().build(); // Return 404 Not Found with no body
         }
+    }
+
+    @GetMapping("patients/{id}")
+    public ResponseEntity<Patient> getPatientById(@PathVariable Long id) throws AttributeNotFoundException {
+        Patient patients = patientRepository.findById(id).orElseThrow(()->new AttributeNotFoundException("patient not found by id:"+id));
+        return ResponseEntity.ok(patients);
+
+    }
+
+    @PutMapping("patients/{id}")
+    public ResponseEntity<?> updatePatientById(@PathVariable Long id, @RequestBody Patient patientDelete) throws AttributeNotFoundException {
+        Patient patients = patientRepository.findById(id).orElseThrow(()->new AttributeNotFoundException("patient not found by id:"+id));
+        patients.setName(patientDelete.getName());
+        patients.setAge(patientDelete.getAge());
+        patients.setBlood(patientDelete.getBlood());
+        patients.setDose(patientDelete.getDose());
+        patients.setFees(patientDelete.getFees());
+        patients.setPrescription(patientDelete.getPrescription());
+        patients.setUrgency(patientDelete.getUrgency());
+        Patient savePatient =   patientRepository.save(patients);
+        return ResponseEntity.ok(savePatient);
+
     }
 
 }

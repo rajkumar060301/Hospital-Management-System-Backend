@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 /*
  * Author Name: Raj Kumar
  * IDE: IntelliJ IDEA Ultimate Edition
- * JDK: 19 version
+ * JDK: 22 version
  * Date: 20-Apr-24
  */
 @Entity
