@@ -19,7 +19,7 @@ import javax.management.AttributeNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = {"http://localhost:4200/", "https://hospital-managament-system-front-end.vercel.app/"})
 @RestController
 @RequestMapping("api/v2")
 public class MedicineController {

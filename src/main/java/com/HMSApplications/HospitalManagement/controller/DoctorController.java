@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.management.AttributeNotFoundException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = {"http://localhost:4200/", "https://hospital-managament-system-front-end.vercel.app/"})
 @RestController
 @RequestMapping("/api/v4/doctor")
 public class DoctorController {

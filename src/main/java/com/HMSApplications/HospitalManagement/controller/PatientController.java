@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin(origins = "http://localhost:4200/")
+@CrossOrigin(origins = {"http://localhost:4200/", "https://hospital-managament-system-front-end.vercel.app/"})
 @RestController
 @RequestMapping("/api/v1")
 public class PatientController {
